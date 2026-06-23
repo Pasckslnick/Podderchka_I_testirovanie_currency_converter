@@ -1,14 +1,15 @@
 import os
 import sqlite3
+import pytest
 
 from src.database import (
     initialize_database,
     add_operation
 )
 from src.models import Operation
-from src.database import load_data
 import json
 from src.database import save_data
+from src.database import add_currency, load_data
 
 
 
@@ -117,3 +118,22 @@ def test_save_data(tmp_path):
         saved_data = json.load(file)
 
     assert saved_data == data
+
+
+def test_add_currency(tmp_path):
+    file_path = tmp_path / "currencies.json"
+
+    add_currency(file_path, "USD", 1.0)
+
+    data = load_data(file_path)
+
+    assert data["USD"] == 1.0
+
+
+def test_add_existing_currency(tmp_path):
+    file_path = tmp_path / "currencies.json"
+
+    add_currency(file_path, "USD", 1.0)
+
+    with pytest.raises(ValueError):
+        add_currency(file_path, "USD", 1.2)

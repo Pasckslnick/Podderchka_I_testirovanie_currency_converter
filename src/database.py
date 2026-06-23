@@ -75,3 +75,14 @@ def save_data(file_path, data):
 
     with open(file_path, "w", encoding="utf-8") as file:
         json.dump(data, file, indent=4)
+
+
+def add_currency(file_path, currency, rate):
+    data = load_data(file_path)
+
+    if currency in data:
+        raise ValueError("Currency already exists.")
+
+    data[currency] = rate
+
+    save_data(file_path, data)
