@@ -10,6 +10,7 @@ from src.models import Operation
 import json
 from src.database import save_data
 from src.database import add_currency, load_data
+from src.database import update_currency
 
 
 
@@ -137,3 +138,26 @@ def test_add_existing_currency(tmp_path):
 
     with pytest.raises(ValueError):
         add_currency(file_path, "USD", 1.2)
+
+
+from src.database import update_currency
+
+
+def test_update_currency(tmp_path):
+    file_path = tmp_path / "currencies.json"
+
+    add_currency(file_path, "USD", 1.0)
+
+    update_currency(file_path, "USD", 78.5)
+
+    data = load_data(file_path)
+
+    assert data["USD"] == 78.5
+
+
+
+def test_update_missing_currency(tmp_path):
+    file_path = tmp_path / "currencies.json"
+
+    with pytest.raises(ValueError):
+        update_currency(file_path, "USD", 80)

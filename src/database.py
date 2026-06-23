@@ -86,3 +86,14 @@ def add_currency(file_path, currency, rate):
     data[currency] = rate
 
     save_data(file_path, data)
+
+
+def update_currency(file_path, currency, new_rate):
+    data = load_data(file_path)
+
+    if currency not in data:
+        raise ValueError("Currency not found.")
+
+    data[currency] = new_rate
+
+    save_data(file_path, data)
