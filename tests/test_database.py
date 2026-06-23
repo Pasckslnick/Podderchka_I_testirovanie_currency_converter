@@ -11,7 +11,7 @@ import json
 from src.database import save_data
 from src.database import add_currency, load_data
 from src.database import update_currency
-
+from src.database import delete_currency
 
 
 def test_database_is_created():
@@ -161,3 +161,25 @@ def test_update_missing_currency(tmp_path):
 
     with pytest.raises(ValueError):
         update_currency(file_path, "USD", 80)
+
+from src.database import delete_currency
+
+
+def test_delete_currency(tmp_path):
+    file_path = tmp_path / "currencies.json"
+
+    add_currency(file_path, "USD", 1.0)
+    add_currency(file_path, "EUR", 0.92)
+
+    delete_currency(file_path, "USD")
+
+    data = load_data(file_path)
+
+    assert "USD" not in data
+    assert "EUR" in data
+
+def test_delete_missing_currency(tmp_path):
+    file_path = tmp_path / "currencies.json"
+
+    with pytest.raises(ValueError):
+        delete_currency(file_path, "USD")
