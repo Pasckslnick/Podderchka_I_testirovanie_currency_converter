@@ -5,6 +5,7 @@ from database import (
     initialize_database,
     add_operation
 )
+from models import Operation
 
 def test_database_is_created():
     db_name = "test_currency.db"
@@ -54,15 +55,16 @@ def test_add_operation():
 
     initialize_database(db_name)
 
-    add_operation(
-        db_name=db_name,
-        date="2026-06-23 18:00",
+    operation = Operation(
+        date="2026-06-23",
         from_currency="USD",
         to_currency="RUB",
         amount=100,
         rate=78.5,
-        result=7850
+        result=7850,
     )
+
+    add_operation(db_name, operation)
 
     connection = sqlite3.connect(db_name)
     cursor = connection.cursor()

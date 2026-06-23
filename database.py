@@ -1,5 +1,5 @@
 import sqlite3
-
+from models import Operation
 
 def initialize_database(db_name="currency_converter.db"):
     connection = sqlite3.connect(db_name)
@@ -21,20 +21,12 @@ def initialize_database(db_name="currency_converter.db"):
     connection.commit()
     connection.close()
 
-def add_operation(
-    db_name,
-    date,
-    from_currency,
-    to_currency,
-    amount,
-    rate,
-    result
-):
+def add_operation(db_name: str, operation: Operation):
     connection = sqlite3.connect(db_name)
-
     cursor = connection.cursor()
 
-    cursor.execute("""
+    cursor.execute(
+        """
         INSERT INTO operations(
             date,
             from_currency,
@@ -44,17 +36,16 @@ def add_operation(
             result
         )
         VALUES (?, ?, ?, ?, ?, ?)
-    """, (
-        date,
-        from_currency,
-        to_currency,
-        amount,
-        rate,
-        result
-    ))
-
-
-
+        """,
+        (
+            operation.date,
+            operation.from_currency,
+            operation.to_currency,
+            operation.amount,
+            operation.rate,
+            operation.result,
+        ),
+    )
 
     connection.commit()
     connection.close()
