@@ -20,3 +20,41 @@ def initialize_database(db_name="currency_converter.db"):
 
     connection.commit()
     connection.close()
+
+def add_operation(
+    db_name,
+    date,
+    from_currency,
+    to_currency,
+    amount,
+    rate,
+    result
+):
+    connection = sqlite3.connect(db_name)
+
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        INSERT INTO operations(
+            date,
+            from_currency,
+            to_currency,
+            amount,
+            rate,
+            result
+        )
+        VALUES (?, ?, ?, ?, ?, ?)
+    """, (
+        date,
+        from_currency,
+        to_currency,
+        amount,
+        rate,
+        result
+    ))
+
+
+
+
+    connection.commit()
+    connection.close()
