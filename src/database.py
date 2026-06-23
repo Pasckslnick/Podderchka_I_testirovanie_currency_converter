@@ -1,5 +1,8 @@
 import sqlite3
 from models import Operation
+from pathlib import Path
+
+DATABASE_PATH = Path("data") / "currency_converter.db"
 
 def initialize_database(db_name="currency_converter.db"):
     connection = sqlite3.connect(db_name)

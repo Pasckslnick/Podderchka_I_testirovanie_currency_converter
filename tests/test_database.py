@@ -1,11 +1,11 @@
 import os
 import sqlite3
 
-from database import (
+from src.database import (
     initialize_database,
     add_operation
 )
-from models import Operation
+from src.models import Operation
 
 def test_database_is_created():
     db_name = "test_currency.db"
