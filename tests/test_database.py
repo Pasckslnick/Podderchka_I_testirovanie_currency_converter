@@ -7,6 +7,10 @@ from src.database import (
 )
 from src.models import Operation
 from src.database import load_data
+import json
+from src.database import save_data
+
+
 
 def test_database_is_created():
     db_name = "test_currency.db"
@@ -95,3 +99,21 @@ def test_load_creates_empty_database(tmp_path):
 
     assert data == {}
     assert os.path.exists(file_path)
+
+
+
+def test_save_data(tmp_path):
+    file_path = tmp_path / "currencies.json"
+
+    data = {
+        "USD": 1.0,
+        "EUR": 0.92,
+        "RUB": 78.5
+    }
+
+    save_data(file_path, data)
+
+    with open(file_path, "r", encoding="utf-8") as file:
+        saved_data = json.load(file)
+
+    assert saved_data == data
