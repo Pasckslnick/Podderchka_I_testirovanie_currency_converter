@@ -107,3 +107,12 @@ def delete_currency(file_path, currency):
     del data[currency]
 
     save_data(file_path, data)
+
+
+def find_currency(file_path, currency):
+    data = load_data(file_path)
+
+    if currency not in data:
+        raise ValueError("Currency not found.")
+
+    return data[currency]
