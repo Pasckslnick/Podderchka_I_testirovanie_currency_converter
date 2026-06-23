@@ -6,6 +6,7 @@ from src.database import (
     add_operation
 )
 from src.models import Operation
+from src.database import load_data
 
 def test_database_is_created():
     db_name = "test_currency.db"
@@ -84,3 +85,13 @@ def test_add_operation():
     assert operation[4] == 100
     assert operation[5] == 78.5
     assert operation[6] == 7850
+
+
+
+def test_load_creates_empty_database(tmp_path):
+    file_path = tmp_path / "currencies.json"
+
+    data = load_data(file_path)
+
+    assert data == {}
+    assert os.path.exists(file_path)

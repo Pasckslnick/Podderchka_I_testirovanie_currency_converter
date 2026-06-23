@@ -1,8 +1,14 @@
 import sqlite3
-from models import Operation
+from src.models import Operation
 from pathlib import Path
+import json
 
 DATABASE_PATH = Path("data") / "currency_converter.db"
+
+
+
+
+
 
 def initialize_database(db_name="currency_converter.db"):
     connection = sqlite3.connect(db_name)
@@ -52,3 +58,14 @@ def add_operation(db_name: str, operation: Operation):
 
     connection.commit()
     connection.close()
+
+
+def load_data(file_path):
+    file_path = Path(file_path)
+
+    if not file_path.exists():
+        file_path.write_text("{}", encoding="utf-8")
+        return {}
+
+    with open(file_path, "r", encoding="utf-8") as file:
+        return json.load(file)
