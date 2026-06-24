@@ -1,79 +1,54 @@
-from src.menu import run_menu_command
-from src.database import load_data
-from src.database import update_currency
+import pytest
 
-from src.converter import convert_currency
-from src.database import delete_currency
-"""
-def test_menu_add_currency(tmp_path):
+from src.database import (
+    add_currency,
+    find_currency,
+    update_currency,
+    delete_currency,
+)
+
+
+def test_add_currency_via_database(tmp_path):
     file_path = tmp_path / "currencies.json"
 
-    result = run_menu_command(
-        command="add",
-        file_path=file_path,
-        currency="USD",
-        rate=1.0
-    )
+    add_currency(file_path, "USD", 1.0)
 
-    data = load_data(file_path)
-
-    assert data["USD"] == 1.0
-    assert result == "Currency added"
+    assert find_currency(file_path, "USD") == 1.0
 
 
-
-
-
-
-
-def test_menu_update_currency(tmp_path):
+def test_update_currency(tmp_path):
     file_path = tmp_path / "currencies.json"
 
-    run_menu_command("add", file_path, "USD", 1.0)
+    add_currency(file_path, "USD", 1.0)
 
-    result = run_menu_command(
-        command="update",
-        file_path=file_path,
-        currency="USD",
-        rate=78.5
-    )
+    update_currency(file_path, "USD", 78.5)
 
-    data = load_data(file_path)
-
-    assert data["USD"] == 78.5
-    assert result == "Currency updated"
+    assert find_currency(file_path, "USD") == 78.5
 
 
-
-
-
-
-def test_menu_delete_currency(tmp_path):
+def test_delete_currency(tmp_path):
     file_path = tmp_path / "currencies.json"
 
-    run_menu_command("add", file_path, "USD", 1.0)
+    add_currency(file_path, "USD", 1.0)
 
-    result = run_menu_command(
-        command="delete",
-        file_path=file_path,
-        currency="USD"
-    )
+    delete_currency(file_path, "USD")
 
-    data = load_data(file_path)
-
-    assert "USD" not in data
-    assert result == "Currency deleted"
+    with pytest.raises(ValueError):
+        find_currency(file_path, "USD")
 
 
+def test_find_currency(tmp_path):
+    file_path = tmp_path / "currencies.json"
+
+    add_currency(file_path, "EUR", 0.92)
+
+    result = find_currency(file_path, "EUR")
+
+    assert result == 0.92
 
 
+def test_find_missing_currency(tmp_path):
+    file_path = tmp_path / "currencies.json"
 
-def test_menu_convert():
-    result = run_menu_command(
-        command="convert",
-        amount=100,
-        from_rate=1,
-        to_rate=0.5
-    )
-
-    assert result == 50"""
+    with pytest.raises(ValueError):
+        find_currency(file_path, "GBP")
